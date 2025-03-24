@@ -1,4 +1,5 @@
 import {
+  Clock,
   HemisphereLight,
   PerspectiveCamera,
   Scene,
@@ -8,6 +9,7 @@ import {
 import GameEntity from "../entities/GameEntity";
 import GameMap from "../map/GameMap";
 import ResourceManager from "../utils/ResourceManager";
+import PlayerTank from "../entities/PlayerTank";
 
 class GameScene {
   private static _instance = new GameScene();
@@ -24,6 +26,7 @@ class GameScene {
 
   //game entities array
   private _gameEntities: GameEntity[] = [];
+  private _clock: Clock = new Clock();
 
   private constructor() {
     this._width = window.innerWidth;
@@ -52,6 +55,10 @@ class GameScene {
 
     const gameMap = new GameMap(new Vector3(0, 0, 0), 15);
     this._gameEntities.push(gameMap);
+
+    //add tank
+    const playerTank = new PlayerTank(new Vector3(7, 7, 0));
+    this._gameEntities.push(playerTank);
   }
 
   private resize = () => {
@@ -80,6 +87,13 @@ class GameScene {
   //render function
   public render = () => {
     requestAnimationFrame(this.render);
+
+    const deltaT = this._clock.getDelta();
+
+    for (let index = 0; index < this._gameEntities.length; index++) {
+      const element = this._gameEntities[index];
+      element.update(deltaT);
+    }
     this._renderer.render(this._scene, this._camera);
   };
 }
