@@ -25,13 +25,14 @@ class MapTile extends GameEntity {
 
 class GameMap extends GameEntity {
   private _size: number;
-  //map entities
+  // map tiles
   private _tiles: MapTile[] = [];
+
   constructor(position: Vector3, size: number) {
     super(position);
     this._size = size;
 
-    //build the grid
+    // build the grid
     for (let i = 0; i < this._size; i++) {
       for (let j = 0; j < this._size; j++) {
         // add a new tile at i,j position
@@ -40,6 +41,7 @@ class GameMap extends GameEntity {
     }
   }
 
+  // load the tiles and add them to this map mesh object
   public load = async () => {
     for (let index = 0; index < this._tiles.length; index++) {
       const element = this._tiles[index];

@@ -6,15 +6,14 @@ class ResourceManager {
   public static get instance() {
     return this._instance;
   }
-
   private constructor() {}
 
-  //resource list
+  // resource list
   private _groundTextures: Texture[] = [];
-  private _models = new Map<String, GLTF>();
+  private _models = new Map<string, GLTF>();
   private _textures = new Map<string, Texture>();
 
-  //public methods to access game loaded resources
+  // public methods to access game loaded resources
   public getModel(modelName: string): GLTF | undefined {
     return this._models.get(modelName);
   }
@@ -23,10 +22,11 @@ class ResourceManager {
     return this._textures.get(textureName);
   }
 
-  //load entry point
+  // load entry point
   public load = async () => {
+    // create a unique texture loader
     const textureLoader = new TextureLoader();
-    await this.loadGroundTextrues(textureLoader);
+    await this.loadGroundTextures(textureLoader);
     await this.loadTextures(textureLoader);
     await this.loadModels();
   };
@@ -39,8 +39,8 @@ class ResourceManager {
   };
 
   private loadTextures = async (textureLoader: TextureLoader) => {
-    //load game textures
-    //player tank
+    // load game textures
+    // player tank
     const tankBodyTexture = await textureLoader.loadAsync(
       "textures/tank-body.png"
     );
@@ -48,20 +48,36 @@ class ResourceManager {
       "textures/tank-turret.png"
     );
 
-    //add to game resourcces
+    // add to the game resources
     this._textures.set("tank-body", tankBodyTexture);
     this._textures.set("tank-turret", tankTurretTexture);
+
+    // load enemy textures
+    // enemy tank
+    const tankBodyTextureRed = await textureLoader.loadAsync(
+      "textures/tank-body-red.png"
+    );
+    const tankTurretTextureRed = await textureLoader.loadAsync(
+      "textures/tank-turret-red.png"
+    );
+
+    // add to the game resources
+    this._textures.set("tank-body-red", tankBodyTextureRed);
+    this._textures.set("tank-turret-red", tankTurretTextureRed);
+
+    // wall texture
+    const wallTexture = await textureLoader.loadAsync("textures/wall.png");
+    this._textures.set("wall", wallTexture);
   };
 
-  // method for groud textures loading
-  private loadGroundTextrues = async (textureLoader: TextureLoader) => {
+  // method for ground textures loading
+  private loadGroundTextures = async (textureLoader: TextureLoader) => {
     const groundTextureFiles = [
       "g1.png",
       "g2.png",
       "g3.png",
       "g4.png",
       "g5.png",
-      "g6.png",
       "g7.png",
       "g8.png",
     ];
